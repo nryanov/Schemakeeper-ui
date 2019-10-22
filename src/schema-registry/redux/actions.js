@@ -33,14 +33,23 @@ export const clearLastException = () => {
     }
 };
 
-export function createSubject(subjectName, compatibilityType, isLocked) {
-    return {
-        type: types.CREATE_SUBJECT,
-        subjectName,
-        compatibilityType,
-        isLocked
+export const createSubject = (subjectName, compatibilityType, schema) => dispatch => {
+    if (schema) {
+        return api.registerSchemaAndSubject(subjectName, compatibilityType, schema)
+            .then(() => dispatch(subjectList()))
+            .catch(error => {
+                dispatch(failedOperation(types.CREATE_SUBJECT, error));
+                throw error;
+            });
+    } else {
+        return api.registerSubject(subjectName, compatibilityType, false)
+            .then(() => dispatch(subjectList()))
+            .catch(error => {
+                dispatch(failedOperation(types.CREATE_SUBJECT, error));
+                throw error;
+            });
     }
-}
+};
 
 export function changePage(newPage) {
     return {

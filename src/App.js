@@ -3,9 +3,11 @@ import SubjectsContainer from "./schema-registry/components/SubjectsContainer";
 import SubjectCardContainer from "./schema-registry/components/SubjectCardContainer";
 import AlertContainer from "./schema-registry/components/Alert";
 import Header from "./schema-registry/components/Header";
+import NewSubjectModal from "./schema-registry/components/NewSubjectModal";
 
 const App = () => (
     <div className="container-fluid">
+        <NewSubjectModal/>
         <Header/>
         <AlertContainer/>
         <div className="row mt-4">
