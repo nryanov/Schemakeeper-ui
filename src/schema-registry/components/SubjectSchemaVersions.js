@@ -37,7 +37,6 @@ const EmptySubjectSchemaVersions = () => (
 );
 
 const Wrapper = ({info, schemas}) => {
-    console.log("SCHEMAS", schemas);
     if (schemas) {
         return <SubjectSchemaVersions schemas={schemas} subject={info.subject}/>
     } else {

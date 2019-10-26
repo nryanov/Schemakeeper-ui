@@ -58,10 +58,10 @@ export function changePage(newPage) {
     }
 }
 
-export const updateSubjectMetaList = (subjectName, subjectMeta) => {
+export const updateSubjectMetaList = (subject, subjectMeta) => {
     return {
         type: types.UPDATE_SUBJECT_META_LIST,
-        subjectName,
+        subject,
         subjectMeta
     }
 };
@@ -94,4 +94,24 @@ export const selectSubject = (subjectName) => (dispatch, getState) => {
             return dispatch({type: types.SELECT_SUBJECT, meta})
         });
     }
+};
+
+//todo: fix race condition
+// A -> delay -> updateSubjectCompatibility-A -> updateLockStatus-A
+//   B -> updateSubjectCompatibility-B -> delay -> updateLockStatus-B
+// updateSubjectCompatibility-A updateLockStatus-B
+export const updateSubjectMeta = (subject, compatibilityType, isLocked) => (dispatch, getState) => {
+    api.updateSubjectCompatibility(subject, compatibilityType)
+        .then(() => {
+            if (isLocked) {
+                return api.lockSubject(subject);
+            } else {
+                return api.unlockSubject(subject);
+            }
+        })
+        .then(() => dispatch({type: types.UPDATE_SUBJECT_META, subject, compatibilityType, isLocked}))
+        .catch(error => {
+            dispatch(failedOperation(types.UPDATE_SUBJECT_META, error));
+            throw error;
+        })
 };

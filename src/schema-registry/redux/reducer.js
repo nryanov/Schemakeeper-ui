@@ -19,11 +19,23 @@ export default function updateState(state, action) {
                 ...state,
                 lastException: null
             };
+        case types.UPDATE_SUBJECT_META:
+            let currentSubjectMeta = {...state.subjectsMeta[action.subject]};
+            currentSubjectMeta.info.compatibilityType = action.compatibilityType;
+            currentSubjectMeta.info.isLocked = action.isLocked;
+            let subjectsMeta = {...state.subjectsMeta};
+            subjectsMeta[action.subject] = currentSubjectMeta;
+
+            return {
+                ...state,
+                selectedSubject: currentSubjectMeta,
+                subjectsMeta: subjectsMeta
+            };
         case types.UPDATE_SUBJECT_META_LIST:
-            let subjectName = action.subjectName;
+            let subject = action.subject;
             let subjectMeta = action.subjectMeta;
             let newMetaCache = {...state.subjectsMeta};
-            newMetaCache[subjectName] = subjectMeta;
+            newMetaCache[subject] = subjectMeta;
 
             return {
                 ...state,

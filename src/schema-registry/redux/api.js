@@ -11,7 +11,6 @@ axios.defaults.headers.common = {
 export const subjects = () => axios.get(`${schemaRegistryUrl}/v1/subjects`);
 export const subjectMetadata = (subjectName) => axios.get(`${schemaRegistryUrl}/v1/subjects/${subjectName}`);
 export const subjectSchemasMetadata = (subjectName) => axios.get(schemaRegistryUrl + "/v1/subjects/" + subjectName + "/schemas");
-export const subjectSchemaByVersion = (subjectName, version) => axios.get(schemaRegistryUrl + "/v1/subjects/" + subjectName + "/schemas/" + version);
 export const lockSubject = (subjectName) => axios.post(schemaRegistryUrl + "/v1/subjects/" + subjectName + "/lock");
 export const unlockSubject = (subjectName) => axios.post(schemaRegistryUrl + "/v1/subjects/" + subjectName + "/unlock");
 export const deleteSubject = (subjectName) => axios.delete(schemaRegistryUrl + "/v1/subjects/" + subjectName);
