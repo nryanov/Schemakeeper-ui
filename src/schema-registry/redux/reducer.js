@@ -44,7 +44,8 @@ export default function updateState(state, action) {
         case types.UPDATE_SUBJECT_LIST:
             return {
                 ...state,
-                subjects: action.subjects
+                subjects: action.subjects,
+                maxPage: Math.ceil(action.subjects.length / 5)
             };
         case types.CREATE_SUBJECT: {
             let subjects = {...state.subjects};

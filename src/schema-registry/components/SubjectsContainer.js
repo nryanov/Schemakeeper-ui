@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import {selectSubject} from '../redux/actions'
 
-const Subjects = ({subjectsNameList, onSelectSubject}) => (
+const Subjects = ({subjectsNameList, page, pageSize, onSelectSubject}) => (
     <table className="table table-hover">
         <thead>
         <tr>
@@ -10,7 +10,7 @@ const Subjects = ({subjectsNameList, onSelectSubject}) => (
         </tr>
         </thead>
         <tbody>
-        {subjectsNameList.map((el, i) =>
+        {subjectsNameList.slice(page * pageSize, (page + 1) * pageSize).map((el, i) =>
             <tr key={i}>
                 <td onClick={() => onSelectSubject(el)}>{el}</td>
             </tr>
@@ -20,7 +20,9 @@ const Subjects = ({subjectsNameList, onSelectSubject}) => (
 );
 
 const mapStateToProps = state => ({
-    subjectsNameList: [...state.subjects]
+    subjectsNameList: [...state.subjects],
+    page: state.page - 1,
+    pageSize: state.pageSize
 });
 
 const mapDispatchToProps = dispatch => ({
