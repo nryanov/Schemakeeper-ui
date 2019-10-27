@@ -20,10 +20,13 @@ export const updateSubjectList = (subjects) => {
 };
 
 export const failedOperation = (actionType, errorMsg) => {
+    let reason = errorMsg.response.data;
+
     return {
         type: types.FAILED_OPERATION,
         actionType,
-        errorMsg
+        errorMsg,
+        reason
     }
 };
 

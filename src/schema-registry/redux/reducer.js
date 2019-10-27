@@ -7,7 +7,7 @@ export default function updateState(state, action) {
         case types.FAILED_OPERATION:
             return {
                 ...state,
-                lastException: `${action.actionType}: ${action.errorMsg}`
+                lastException: `${action.errorMsg}: ${JSON.stringify(action.reason)}`
             };
         case types.CHANGE_PAGE:
             return {
