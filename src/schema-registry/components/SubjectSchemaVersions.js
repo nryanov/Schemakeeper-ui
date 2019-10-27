@@ -1,26 +1,33 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {parse} from 'avro-js'
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-const SubjectSchemaVersion = ({subject, schemaId, version, schemaText, schemaType}) => (
-    <div className="card">
-        <div className="card-header" id={`heading${subject}-${version}`}>
-            <h5 className="mb-0">
-                <button className="btn btn-link" data-toggle="collapse" data-target={`#${subject}-${version}`}
-                        aria-expanded="true" aria-controls={`${subject - version}`}>
-                    {`v.${version} - Schema id: ${schemaId}`}
-                </button>
-            </h5>
-        </div>
+class SubjectSchemaVersion extends React.Component {
+    render() {
+        return (
+            <div className="card">
+                <div className="card-header" id={`heading${this.props.subject}-${this.props.version}`}>
+                    <h5 className="mb-0">
+                        <button className="btn btn-link" data-toggle="collapse" data-target={`#${this.props.subject}-${this.props.version}`}
+                                aria-expanded="true" aria-controls={`${this.props.subject - this.props.version}`}>
+                            {`v.${this.props.version} - Schema id: ${this.props.schemaId}`}
+                        </button>
+                    </h5>
+                </div>
 
-        <div id={`${subject}-${version}`} className="collapse" aria-labelledby={`heading${subject}-${version}`}
-             data-parent="#accordion">
-            <div className="card-body">
-                {parse(schemaText).toJSON()}
+                <div id={`${this.props.subject}-${this.props.version}`} className="collapse" aria-labelledby={`heading${this.props.subject}-${this.props.version}`}
+                     data-parent="#accordion">
+                    <div className="card-body">
+                        <SyntaxHighlighter language="json" style={docco}>
+                            {JSON.stringify(JSON.parse(this.props.schemaText), null, 2)}
+                        </SyntaxHighlighter>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-);
+        )
+    }
+}
 
 const SubjectSchemaVersions = ({schemas}) => (
     <div className="tab-pane fade mt-4" id="versions" role="tabpanel" aria-labelledby="versions-tab">
