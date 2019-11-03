@@ -33,13 +33,11 @@ const SubjectCard = ({subject}) => (
     </div>
 );
 
-const Wrapper = ({info}) => {
-    if (info) {
-        return <SubjectCard subject={info.subject}/>
-    } else {
-        return <div/>
-    }
-};
+const Wrapper = ({info}) => (
+    <>
+        {info ? <SubjectCard subject={info.subject}/> : <></>}
+    </>
+);
 
 const mapStateToProps = state => ({
     ...state.selectedSubject
