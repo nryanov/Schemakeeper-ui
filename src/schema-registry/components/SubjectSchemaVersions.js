@@ -39,20 +39,20 @@ const SubjectSchemaVersions = ({schemas}) => (
 
 const EmptySubjectSchemaVersions = () => (
     <div className="tab-pane fade" id="versions" role="tabpanel" aria-labelledby="versions-tab">
-        Subject has no registered schemas
+        <p className="mt-4">Subject has no registered schemas</p>
     </div>
 );
 
-const Wrapper = ({info, schemas}) => {
-    if (schemas) {
-        return <SubjectSchemaVersions schemas={schemas} subject={info.subject}/>
+const Wrapper = ({schemas}) => {
+    if (schemas && schemas.length > 0) {
+        return <SubjectSchemaVersions schemas={schemas}/>
     } else {
         return <EmptySubjectSchemaVersions/>
     }
 };
 
 const mapStateToProps = state => ({
-    ...state.selectedSubject
+    schemas: state.selectedSubject.schemas
 });
 
 const SubjectSchemaVersionsContainer = connect(mapStateToProps, null)(Wrapper);

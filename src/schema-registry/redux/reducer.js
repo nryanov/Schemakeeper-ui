@@ -1,9 +1,24 @@
 import * as types from './actionTypes'
 
-// https://habr.com/ru/post/269831/
-
 export default function updateState(state, action) {
     switch (action.type) {
+        case types.SEARCH_SUBJECTS_BY_NAME:
+            if (action.pattern === null || action.pattern.length === 0) {
+                return {
+                    ...state,
+                    filteredSubjects: null,
+                    page: 1,
+                    maxPage: Math.ceil(state.subjects.length / 5)
+                };
+            } else {
+                let filteredSubjects = [...state.subjects].filter(subject => subject.includes(action.pattern));
+                return {
+                    ...state,
+                    filteredSubjects: filteredSubjects,
+                    page: 1,
+                    maxPage: Math.ceil(filteredSubjects.length / 5)
+                };
+            }
         case types.FAILED_OPERATION:
             return {
                 ...state,

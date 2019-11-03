@@ -18,6 +18,7 @@ let initialState = {
     maxPage: 1,
     pageSize: 5,
     subjects: [],
+    filteredSubjects: null,
     subjectsMeta: {},
     selectedSubject: null,
     lastException: null

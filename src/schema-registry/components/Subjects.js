@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import {selectSubject} from '../redux/actions'
 
+const Subjects = ({subjectsNameList, page, pageSize, onSelectSubject}) => (
     <table className="table table-hover">
         <thead>
         <tr>
@@ -18,8 +19,17 @@ import {selectSubject} from '../redux/actions'
     </table>
 );
 
+const Wrapper = ({subjectsNameList, filteredSubjects, page, pageSize, onSelectSubject}) => {
+    if (filteredSubjects) {
+        return <Subjects subjectsNameList={filteredSubjects} page={page} pageSize={pageSize} onSelectSubject={onSelectSubject}/>
+    } else {
+        return <Subjects subjectsNameList={subjectsNameList} page={page} pageSize={pageSize} onSelectSubject={onSelectSubject}/>
+    }
+};
+
 const mapStateToProps = state => ({
     subjectsNameList: state.subjects,
+    filteredSubjects: state.filteredSubjects,
     page: state.page - 1,
     pageSize: state.pageSize
 });
@@ -30,6 +40,6 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-const SubjectsContainer = connect(mapStateToProps, mapDispatchToProps)(Subjects);
+const SubjectsContainer = connect(mapStateToProps, mapDispatchToProps)(Wrapper);
 
 export default SubjectsContainer;

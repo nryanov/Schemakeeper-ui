@@ -1,6 +1,13 @@
 import * as types from './actionTypes'
 import * as api from './api'
 
+export const searchSubjectsByName = (pattern) => {
+    return {
+        type: types.SEARCH_SUBJECTS_BY_NAME,
+        pattern
+    }
+};
+
 export const subjectList = () => (dispatch) => {
     dispatch({type: types.FETCH_SUBJECT_LIST});
 
