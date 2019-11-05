@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import {schemaTextToJson} from "../utils/AvroUtils";
 
 class SubjectSchemaVersion extends React.Component {
     render() {
@@ -20,7 +21,7 @@ class SubjectSchemaVersion extends React.Component {
                      data-parent="#accordion">
                     <div className="card-body">
                         <SyntaxHighlighter language="json" style={docco}>
-                            {JSON.stringify(JSON.parse(this.props.schemaText), null, 2)}
+                            {schemaTextToJson(this.props.schemaText)}
                         </SyntaxHighlighter>
                     </div>
                 </div>

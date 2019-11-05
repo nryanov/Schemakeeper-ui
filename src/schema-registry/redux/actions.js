@@ -8,6 +8,19 @@ export const searchSubjectsByName = (pattern) => {
     }
 };
 
+export const addNewSchemaToSubject = (subject, compatibilityType, schemaText) => (dispatch) => {
+    if (schemaText) {
+        return api.registerSchemaAndSubject(subject, compatibilityType, schemaText)
+            .then(() => dispatch(fetchSubjectMeta(subject)))
+            .catch(error => {
+                dispatch(failedOperation(types.ADD_NEW_SCHEMA_TO_SUBJECT, error));
+                throw error;
+            });
+    } else {
+        dispatch(failedOperation(types.ADD_NEW_SCHEMA_TO_SUBJECT, "Schema text should not be empty"));
+    }
+};
+
 export const subjectList = () => (dispatch) => {
     dispatch({type: types.FETCH_SUBJECT_LIST});
 

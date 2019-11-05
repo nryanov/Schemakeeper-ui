@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import SubjectSchemaVersionsContainer from "./SubjectSchemaVersions";
 import SubjectInfoContainer from "./SubjectInfo";
-import Schema from "./Schema";
+import SchemaContainer from "./Schema";
 
 const SubjectCard = ({subject}) => (
     <div className="card">
@@ -27,7 +27,7 @@ const SubjectCard = ({subject}) => (
             <div className="tab-content" id="myTabContent">
                 <SubjectInfoContainer/>
                 <SubjectSchemaVersionsContainer/>
-                <Schema/>
+                <SchemaContainer/>
             </div>
         </div>
     </div>

@@ -1,10 +1,15 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {createSubject} from "../redux/actions";
+import {isSchemaValid} from "../utils/AvroUtils";
 
 class NewSubjectModal extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            isSchemaValid: true
+        };
 
         this.subjectNameInput = React.createRef();
         this.compatibilityTypeInput = React.createRef();
@@ -12,16 +17,32 @@ class NewSubjectModal extends React.Component {
 
         this.clearInputs = this.clearInputs.bind(this);
         this.newSubject = this.newSubject.bind(this);
+        this.validateSchema = this.validateSchema.bind(this);
     }
 
     clearInputs() {
         this.subjectNameInput.current.value = "";
         this.compatibilityTypeInput.current.value = "NONE";
         this.schemaInput.current.value = "";
+        this.setState({
+            isSchemaValid: true
+        })
+    }
+
+    validateSchema() {
+        this.setState({
+            isSchemaValid: this.schemaInput.current.value.length === 0 || isSchemaValid(this.schemaInput.current.value)
+        })
     }
 
     newSubject() {
-        this.props.createSubject(this.subjectNameInput.current.value, this.compatibilityTypeInput.current.value, this.schemaInput.current.value);
+        let schemaText = this.schemaInput.current.value;
+        if (schemaText.length > 0) {
+            let schema = JSON.stringify(schemaText);
+            this.props.createSubject(this.subjectNameInput.current.value, this.compatibilityTypeInput.current.value, schema);
+        } else {
+            this.props.createSubject(this.subjectNameInput.current.value, this.compatibilityTypeInput.current.value, null);
+        }
         this.clearInputs();
     }
 
@@ -62,9 +83,9 @@ class NewSubjectModal extends React.Component {
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="newSubjectFormControlSchema">Schema (optional)</label>
-                                    <textarea className="form-control" id="newSubjectFormControlSchema"
-                                              ref={this.schemaInput}
-                                              rows="3"></textarea>
+                                    <textarea className={`form-control ${this.state.isSchemaValid ? '' : 'is-invalid'}`} id="newSubjectFormControlSchema"
+                                              ref={this.schemaInput} rows="3" onChange={this.validateSchema}>
+                                    </textarea>
                                 </div>
                             </form>
                         </div>
