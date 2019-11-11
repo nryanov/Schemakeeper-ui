@@ -1,8 +1,6 @@
 import axios from 'axios'
 
-//todo: get from config
-const schemaRegistryUrl = "http://192.168.99.100:9081";
-// const schemaRegistryUrl = "http://localhost:9081";
+const schemaRegistryUrl = process.env.REACT_APP_SCHEMAKEEPER_URL;
 
 axios.defaults.headers.common = {
     ...axios.defaults.headers.common

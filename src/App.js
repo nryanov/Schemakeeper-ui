@@ -1,20 +1,22 @@
 import React from 'react';
-import SubjectsContainer from "./schema-registry/components/SubjectsContainer";
-import SubjectCardContainer from "./schema-registry/components/SubjectCardContainer";
+import SubjectsContainer from "./schema-registry/components/Subjects";
+import SubjectCardContainer from "./schema-registry/components/SubjectCard";
 import AlertContainer from "./schema-registry/components/Alert";
 import Header from "./schema-registry/components/Header";
-import NewSubjectModal from "./schema-registry/components/NewSubjectModal";
 import PaginationContainer from "./schema-registry/components/Pagination";
+import SearchContainer from "./schema-registry/components/Search";
+import SchemakeeperInfo from "./schema-registry/components/SchemakeeperInfo";
 
 const App = () => (
     <div className="container-fluid">
-        <NewSubjectModal/>
         <Header/>
         <AlertContainer/>
         <div className="row mt-4">
             <div className='col-4'>
+                <SearchContainer/>
                 <SubjectsContainer/>
                 <PaginationContainer/>
+                <SchemakeeperInfo/>
             </div>
             <div className='col-8'>
                 <SubjectCardContainer/>

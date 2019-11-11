@@ -4,31 +4,27 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {schemaTextToJson} from "../utils/AvroUtils";
 
-class SubjectSchemaVersion extends React.Component {
-    render() {
-        return (
-            <div className="card">
-                <div className="card-header" id={`heading${this.props.subject}-${this.props.version}`}>
-                    <h5 className="mb-0">
-                        <button className="btn btn-link" data-toggle="collapse" data-target={`#${this.props.subject}-${this.props.version}`}
-                                aria-expanded="true" aria-controls={`${this.props.subject - this.props.version}`}>
-                            {`v.${this.props.version} - Schema id: ${this.props.schemaId}`}
-                        </button>
-                    </h5>
-                </div>
+const SubjectSchemaVersion = ({subject, version, schemaText, schemaId}) => (
+    <div className="card">
+        <div className="card-header" id={`heading${subject}-${version}`}>
+            <h5 className="mb-0">
+                <button className="btn btn-link" data-toggle="collapse" data-target={`#${subject}-${version}`}
+                        aria-expanded="true" aria-controls={`${subject - version}`}>
+                    {`v.${version} - Schema id: ${schemaId}`}
+                </button>
+            </h5>
+        </div>
 
-                <div id={`${this.props.subject}-${this.props.version}`} className="collapse" aria-labelledby={`heading${this.props.subject}-${this.props.version}`}
-                     data-parent="#accordion">
-                    <div className="card-body">
-                        <SyntaxHighlighter language="json" style={docco}>
-                            {schemaTextToJson(this.props.schemaText)}
-                        </SyntaxHighlighter>
-                    </div>
-                </div>
+        <div id={`${subject}-${version}`} className="collapse" aria-labelledby={`heading${subject}-${version}`}
+             data-parent="#accordion">
+            <div className="card-body">
+                <SyntaxHighlighter language="json" style={docco}>
+                    {schemaTextToJson(schemaText)}
+                </SyntaxHighlighter>
             </div>
-        )
-    }
-}
+        </div>
+    </div>
+);
 
 const SubjectSchemaVersions = ({schemas}) => (
     <div className="tab-pane fade mt-4" id="versions" role="tabpanel" aria-labelledby="versions-tab">
@@ -39,8 +35,8 @@ const SubjectSchemaVersions = ({schemas}) => (
 );
 
 const EmptySubjectSchemaVersions = () => (
-    <div className="tab-pane fade" id="versions" role="tabpanel" aria-labelledby="versions-tab">
-        <p className="mt-4">Subject has no registered schemas</p>
+    <div className="tab-pane fade mt-4" id="versions" role="tabpanel" aria-labelledby="versions-tab">
+        <p>Subject has no registered schemas</p>
     </div>
 );
 

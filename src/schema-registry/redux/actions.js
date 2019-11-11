@@ -40,7 +40,7 @@ export const updateSubjectList = (subjects) => {
 };
 
 export const failedOperation = (actionType, errorMsg) => {
-    let reason = errorMsg.response.data;
+    let reason =  errorMsg.response ? errorMsg.response.data : "INTERNAL ERROR";
 
     return {
         type: types.FAILED_OPERATION,
