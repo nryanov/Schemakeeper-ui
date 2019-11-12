@@ -5,7 +5,7 @@ import AlertContainer from "./schema-registry/components/Alert";
 import Header from "./schema-registry/components/Header";
 import PaginationContainer from "./schema-registry/components/Pagination";
 import SearchContainer from "./schema-registry/components/Search";
-import SchemakeeperInfo from "./schema-registry/components/SchemakeeperInfo";
+import SchemakeeperInfoContainer from "./schema-registry/components/SchemakeeperInfo";
 
 const App = () => (
     <div className="container-fluid">
@@ -16,7 +16,7 @@ const App = () => (
                 <SearchContainer/>
                 <SubjectsContainer/>
                 <PaginationContainer/>
-                <SchemakeeperInfo/>
+                <SchemakeeperInfoContainer/>
             </div>
             <div className='col-8'>
                 <SubjectCardContainer/>

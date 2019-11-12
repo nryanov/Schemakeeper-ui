@@ -2,6 +2,16 @@ import * as types from './actionTypes'
 
 export default function updateState(state, action) {
     switch (action.type) {
+        case types.NO_CONNECTION:
+            return {
+                ...state,
+                isAccessible: false
+            };
+        case types.SUCCESSFUL_CONNECTION:
+            return {
+                ...state,
+                isAccessible: true
+            };
         case types.SEARCH_SUBJECTS_BY_NAME:
             if (action.pattern === null || action.pattern.length === 0) {
                 return {
