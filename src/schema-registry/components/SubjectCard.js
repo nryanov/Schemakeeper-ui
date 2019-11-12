@@ -3,11 +3,19 @@ import {connect} from 'react-redux'
 import SubjectSchemaVersionsContainer from "./SubjectSchemaVersions";
 import SubjectInfoContainer from "./SubjectInfo";
 import SchemaContainer from "./Schema";
+import {deleteSubject} from "../redux/actions";
 
-const SubjectCard = ({subject}) => (
+const SubjectCard = ({subject, deleteSubject}) => (
     <div className="card">
         <div className="card-header">
             {subject}
+
+            {
+                process.env.REACT_APP_ALLOW_TO_DELETE_SUBJECTS === "true" ?
+                <button type="button" className="close" onClick={() => deleteSubject(subject)}>
+                    <span aria-hidden="true">&times;</span>
+                </button> : <></>
+            }
         </div>
         <div className="card-body">
             <ul className="nav nav-tabs" id="myTab" role="tablist">
@@ -33,9 +41,9 @@ const SubjectCard = ({subject}) => (
     </div>
 );
 
-const Wrapper = ({info}) => (
+const Wrapper = ({info, deleteSubject}) => (
     <>
-        {info ? <SubjectCard subject={info.subject}/> : <></>}
+        {info ? <SubjectCard subject={info.subject} deleteSubject={deleteSubject}/> : <></>}
     </>
 );
 
@@ -43,6 +51,15 @@ const mapStateToProps = state => ({
     ...state.selectedSubject
 });
 
-const SubjectCardContainer = connect(mapStateToProps, null)(Wrapper);
+const mapDispatchToProps = dispatch => ({
+    deleteSubject(subject) {
+        // eslint-disable-next-line no-restricted-globals
+        if (confirm(`Delete subject ${subject}?`)) {
+            dispatch(deleteSubject(subject))
+        }
+    }
+});
+
+const SubjectCardContainer = connect(mapStateToProps, mapDispatchToProps)(Wrapper);
 
 export default SubjectCardContainer;

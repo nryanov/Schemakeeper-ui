@@ -25,8 +25,12 @@ export const subjectList = () => (dispatch) => {
     dispatch({type: types.FETCH_SUBJECT_LIST});
 
     return api.subjects()
-        .then(response => dispatch(updateSubjectList(response.data)))
+        .then(response => {
+            dispatch({type: types.SUCCESSFUL_CONNECTION});
+            dispatch(updateSubjectList(response.data))
+        })
         .catch(error => {
+            dispatch({type: types.NO_CONNECTION});
             dispatch(failedOperation(types.FETCH_SUBJECT_LIST, error));
             throw error;
         })
@@ -89,7 +93,25 @@ export const updateSubjectMetaList = (subject, subjectMeta) => {
     }
 };
 
-export const fetchSubjectMeta = (subjectName) => (dispatch, getState) => {
+export const deleteSubject = (subject) => (dispatch) => {
+    return api.deleteSubject(subject)
+        .then(_ => dispatch({type: types.DELETE_SUBJECT, subject}))
+        .catch(error => {
+            dispatch(failedOperation(types.DELETE_SUBJECT, error));
+            throw error;
+        })
+};
+
+export const deleteSubjectSchemaByVersion = (subject, version) => (dispatch) => {
+    return api.deleteSubjectSchemaByVersion(subject, version)
+        .then(_ => dispatch({type: types.DELETE_SUBJECT_SCHEMA_VERSION, subject, version}))
+        .catch(error => {
+            dispatch(failedOperation(types.DELETE_SUBJECT_SCHEMA_VERSION, error));
+            throw error;
+        })
+};
+
+export const fetchSubjectMeta = (subjectName) => (dispatch) => {
     dispatch({type: types.FETCH_SUBJECT_META});
     return api.subjectMetadata(subjectName)
         .then(subjectInfo => {

@@ -12,6 +12,24 @@ export default function updateState(state, action) {
                 ...state,
                 isAccessible: true
             };
+        case types.DELETE_SUBJECT:
+            let subjectsAfterDeleting = [...state.subjects].filter(subject => subject !== action.subject);
+            let subjectsMetaAfterDeleting = {...state.subjectsMeta};
+            delete subjectsMetaAfterDeleting[action.subject];
+            return {
+                ...state,
+                subjects: subjectsAfterDeleting,
+                subjectsMeta: subjectsMetaAfterDeleting,
+                selectedSubject: null
+            };
+        case types.DELETE_SUBJECT_SCHEMA_VERSION:
+            let subjectsMetaAfterDeletingVersion = {...state.subjectsMeta};
+            let remainingSubjectSchemas = subjectsMetaAfterDeletingVersion[action.subject].schemas.filter(schema => schema.version !== action.version);
+            subjectsMetaAfterDeletingVersion[action.subject].schemas = remainingSubjectSchemas;
+            return {
+                ...state,
+                subjectsMeta: subjectsMetaAfterDeletingVersion
+            };
         case types.SEARCH_SUBJECTS_BY_NAME:
             if (action.pattern === null || action.pattern.length === 0) {
                 return {
