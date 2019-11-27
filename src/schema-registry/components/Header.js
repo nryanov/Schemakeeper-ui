@@ -12,7 +12,7 @@ const Header = () => (
             </button>
             <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <form className="form-inline">
-                    <button className="btn btn-outline-success" type="button" data-toggle="modal"
+                    <button className="btn btn-outline-success" id="newSubjectModalBtn" type="button" data-toggle="modal"
                             data-target="#newSubjectModal">New subject
                     </button>
                 </form>

@@ -63,14 +63,14 @@ export const clearLastException = () => {
 export const createSubject = (subjectName, compatibilityType, schema) => dispatch => {
     if (schema) {
         return api.registerSchemaAndSubject(subjectName, compatibilityType, schema)
-            .then(() => dispatch(subjectList()))
+            .then(() => dispatch({type: types.CREATE_SUBJECT, subjectName}))
             .catch(error => {
                 dispatch(failedOperation(types.CREATE_SUBJECT, error));
                 throw error;
             });
     } else {
         return api.registerSubject(subjectName, compatibilityType, false)
-            .then(() => dispatch(subjectList()))
+            .then(() => dispatch({type: types.CREATE_SUBJECT, subjectName}))
             .catch(error => {
                 dispatch(failedOperation(types.CREATE_SUBJECT, error));
                 throw error;

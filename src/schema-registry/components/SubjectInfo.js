@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {updateSubjectMeta} from "../redux/actions";
+import {updateSubjectMeta} from "../logic/actions";
 
 class SubjectInfoModal extends React.Component {
     constructor(props) {

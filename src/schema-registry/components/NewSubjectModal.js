@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {createSubject} from "../redux/actions";
+import {createSubject} from "../logic/actions";
 import {isSchemaValid} from "../utils/AvroUtils";
 
 class NewSubjectModal extends React.Component {

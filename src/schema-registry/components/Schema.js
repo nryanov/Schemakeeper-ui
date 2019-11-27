@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {isSchemaValid, schemaTextToJsonNotEscaped} from "../utils/AvroUtils";
-import {addNewSchemaToSubject} from "../redux/actions";
+import {addNewSchemaToSubject} from "../logic/actions";
 
 class Schema extends React.Component {
     constructor(props) {

@@ -6,7 +6,7 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 import App from './App';
 import { Provider } from 'react-redux'
 import * as serviceWorker from './serviceWorker';
-import store from "./schema-registry/redux/store";
+import store from "./schema-registry/logic/store";
 
 ReactDOM.render(
     <Provider store={store}>

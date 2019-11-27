@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import {selectSubject} from '../redux/actions'
+import {selectSubject} from '../logic/actions'
 
 const Subjects = ({subjectsNameList, page, pageSize, onSelectSubject}) => (
     <table className="table table-hover">

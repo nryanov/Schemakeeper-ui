@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {schemaTextToJson} from "../utils/AvroUtils";
-import {deleteSubjectSchemaByVersion} from "../redux/actions";
+import {deleteSubjectSchemaByVersion} from "../logic/actions";
 
 const SubjectSchemaVersion = ({subject, version, schemaText, schemaType, schemaId, deleteSubjectSchemaByVersion}) => (
     <div className="card">

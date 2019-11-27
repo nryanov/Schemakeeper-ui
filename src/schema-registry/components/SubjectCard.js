@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import SubjectSchemaVersionsContainer from "./SubjectSchemaVersions";
 import SubjectInfoContainer from "./SubjectInfo";
 import SchemaContainer from "./Schema";
-import {deleteSubject} from "../redux/actions";
+import {deleteSubject} from "../logic/actions";
 
 const SubjectCard = ({subject, deleteSubject}) => (
     <div className="card">

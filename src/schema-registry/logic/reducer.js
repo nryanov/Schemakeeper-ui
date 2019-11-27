@@ -1,5 +1,7 @@
 import * as types from './actionTypes'
 
+const PAGE_SIZE = 5;
+
 export default function updateState(state, action) {
     switch (action.type) {
         case types.NO_CONNECTION:
@@ -36,7 +38,7 @@ export default function updateState(state, action) {
                     ...state,
                     filteredSubjects: null,
                     page: 1,
-                    maxPage: Math.ceil(state.subjects.length / 5)
+                    maxPage: Math.ceil(state.subjects.length / PAGE_SIZE)
                 };
             } else {
                 let filteredSubjects = [...state.subjects].filter(subject => subject.includes(action.pattern));
@@ -44,7 +46,7 @@ export default function updateState(state, action) {
                     ...state,
                     filteredSubjects: filteredSubjects,
                     page: 1,
-                    maxPage: Math.ceil(filteredSubjects.length / 5)
+                    maxPage: Math.ceil(filteredSubjects.length / PAGE_SIZE)
                 };
             }
         case types.FAILED_OPERATION:
@@ -88,19 +90,15 @@ export default function updateState(state, action) {
             return {
                 ...state,
                 subjects: action.subjects,
-                maxPage: Math.ceil(action.subjects.length / 5)
+                maxPage: Math.ceil(action.subjects.length / PAGE_SIZE)
             };
         case types.CREATE_SUBJECT: {
-            let subjects = {...state.subjects};
-            subjects[action.subjectName] = {
-                subjectName: action.subjectName,
-                compatibilityType: action.compatibilityType,
-                isLocked: action.isLocked
-            };
+            let subjects = [...state.subjects];
+            subjects.push(action.subjectName);
 
             return {
                 ...state,
-                subjects: subjects
+                subjects: subjects,
             };
         }
         case types.SELECT_SUBJECT: {

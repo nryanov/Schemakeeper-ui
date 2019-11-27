@@ -1,11 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {clearLastException} from "../redux/actions";
+import {clearLastException} from "../logic/actions";
 
 const Alert = ({lastException, clearLastException}) => (
-    <div className="alert alert-danger alert-dismissible fade show" role="alert">
+    <div id='lastExceptionAlert' className="alert alert-danger alert-dismissible fade show" role="alert">
         {lastException}
-        <button type="button" onClick={() => clearLastException()} className="close" data-dismiss="alert"
+        <button id='lastExceptionAlertCloseBtn' type="button" onClick={() => clearLastException()} className="close" data-dismiss="alert"
                 aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -26,7 +26,7 @@ const Wrapper = ({lastException, clearLastException}) => {
     if (lastException) {
         return <Alert lastException={lastException} clearLastException={clearLastException}/>
     } else {
-        return <div/>
+        return <></>
     }
 };
 
