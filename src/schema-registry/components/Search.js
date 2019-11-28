@@ -10,10 +10,7 @@ class Search extends React.Component {
         this.searchSubjectsByName = this.searchSubjectsByName.bind(this);
     }
 
-    searchSubjectsByName(e) {
-        e.preventDefault();
-        console.log("INPUT", this.subjectNameInput.current.value);
-        console.log("INPUT", e.target.value);
+    searchSubjectsByName() {
         this.props.searchSubjectsByName(this.subjectNameInput.current.value);
     }
 
@@ -23,7 +20,7 @@ class Search extends React.Component {
                 <div className="input-group-prepend">
                     <span className="input-group-text" id="basic-addon1">Search</span>
                 </div>
-                <input onChange={(e) => this.searchSubjectsByName(e)} ref={this.subjectNameInput} type="text" className="form-control" placeholder="Subject name" aria-label="subject"
+                <input onChange={this.searchSubjectsByName} ref={this.subjectNameInput} type="text" className="form-control" placeholder="Subject name" aria-label="subject"
                        aria-describedby="basic-addon1"/>
             </div>
         )

@@ -7,43 +7,53 @@ class NewSubjectModal extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            isSchemaValid: true
-        };
-
         this.subjectNameInput = React.createRef();
         this.compatibilityTypeInput = React.createRef();
         this.schemaInput = React.createRef();
+        this.closeButton = React.createRef();
 
         this.clearInputs = this.clearInputs.bind(this);
         this.newSubject = this.newSubject.bind(this);
-        this.validateSchema = this.validateSchema.bind(this);
+        this.validateInputs = this.validateInputs.bind(this);
     }
 
     clearInputs() {
         this.subjectNameInput.current.value = "";
         this.compatibilityTypeInput.current.value = "NONE";
         this.schemaInput.current.value = "";
-        this.setState({
-            isSchemaValid: true
-        })
     }
 
-    validateSchema() {
-        this.setState({
-            isSchemaValid: this.schemaInput.current.value.length === 0 || isSchemaValid(this.schemaInput.current.value)
-        })
+    validateInputs() {
+        if (this.schemaInput.current.value.length !== 0 && !isSchemaValid(this.schemaInput.current.value)) {
+            this.schemaInput.current.classList.add('is-invalid');
+        } else {
+            this.schemaInput.current.classList.remove('is-invalid');
+        }
+
+        if (this.subjectNameInput.current.value.length === 0) {
+            this.subjectNameInput.current.classList.add('is-invalid');
+        } else {
+            this.subjectNameInput.current.classList.remove('is-invalid');
+        }
     }
 
     newSubject() {
         let schemaText = this.schemaInput.current.value;
-        if (schemaText.length > 0) {
-            let schema = JSON.stringify(schemaText);
-            this.props.createSubject(this.subjectNameInput.current.value, this.compatibilityTypeInput.current.value, schema);
+        let subjectName = this.subjectNameInput.current.value;
+
+        if (subjectName.length > 0) {
+            if (schemaText.length > 0) {
+                let schema = JSON.stringify(schemaText);
+                this.props.createSubject(this.subjectNameInput.current.value, this.compatibilityTypeInput.current.value, schema);
+            } else {
+                this.props.createSubject(this.subjectNameInput.current.value, this.compatibilityTypeInput.current.value, null);
+            }
+
+            this.clearInputs();
+            this.closeButton.current.click();
         } else {
-            this.props.createSubject(this.subjectNameInput.current.value, this.compatibilityTypeInput.current.value, null);
+            this.subjectNameInput.current.classList.add('is-invalid');
         }
-        this.clearInputs();
     }
 
     render() {
@@ -66,7 +76,12 @@ class NewSubjectModal extends React.Component {
                                     <label htmlFor="newSubjectFormControlName">Subject name</label>
                                     <input type="text" ref={this.subjectNameInput} className="form-control"
                                            id="newSubjectFormControlName"
-                                           placeholder="<Subject name>"/>
+                                           placeholder="Subject name"
+                                           onChange={this.validateInputs}
+                                    />
+                                    <div className="invalid-feedback">
+                                        Subject name should not be empty
+                                    </div>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="newSubjectFormControlCompatibilityType">Compatibility type</label>
@@ -83,17 +98,20 @@ class NewSubjectModal extends React.Component {
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="newSubjectFormControlSchema">Schema (optional)</label>
-                                    <textarea className={`form-control ${this.state.isSchemaValid ? '' : 'is-invalid'}`} id="newSubjectFormControlSchema"
-                                              ref={this.schemaInput} rows="3" onChange={this.validateSchema}>
+                                    <textarea className='form-control' id="newSubjectFormControlSchema"
+                                              ref={this.schemaInput} rows="3" onChange={this.validateInputs}>
                                     </textarea>
+                                    <div className="invalid-feedback">
+                                        Invalid avro schema
+                                    </div>
                                 </div>
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-dismiss="modal"
+                            <button type="button" className="btn btn-secondary" data-dismiss="modal" ref={this.closeButton}
                                     onClick={this.clearInputs}>Close
                             </button>
-                            <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={this.newSubject}>Save changes</button>
+                            <button type="button" className="btn btn-primary" onClick={this.newSubject}>Save changes</button>
                         </div>
                     </div>
                 </div>

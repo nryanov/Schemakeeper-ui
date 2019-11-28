@@ -17,7 +17,6 @@ describe("Search component spec", () => {
         expect(wrapper.find(SearchContainer).length).toEqual(1);
     });
 
-    //fixme: incorrect test
     it('emit SEARCH_SUBJECTS_BY_NAME event', () => {
         const expectedActions = [
             {type: types.SEARCH_SUBJECTS_BY_NAME, pattern: 'sample'},
@@ -25,7 +24,9 @@ describe("Search component spec", () => {
 
         const store = mockStore();
         const wrapper = mount(<Provider store={store}><SearchContainer/></Provider>);
-        wrapper.find('input').simulate('change', {target: {value: 'sample'}});
+        const input = wrapper.find('input');
+        input.getDOMNode().value = 'sample';
+        input.simulate('change');
         expect(store.getActions()).toEqual(expectedActions)
     });
 });
