@@ -12,7 +12,16 @@ describe("SubjectInfo component spec", () => {
     const mockStore = configureStore(middlewares);
 
     it('render the connected(SubjectInfoContainer) component', () => {
-        let store = mockStore();
+        let initialState = {
+            selectedSubject: {
+                info: {
+                    subject: 's1',
+                    compatibilityType: 'FULL',
+                    isLocked: false
+                }
+            }
+        };
+        let store = mockStore(initialState);
         let wrapper = mount(<Provider store={store}><SubjectInfoContainer/></Provider>);
         expect(wrapper.find(SubjectInfoContainer).length).toEqual(1);
     });
