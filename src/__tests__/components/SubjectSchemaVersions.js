@@ -12,7 +12,15 @@ describe("SubjectInfo component spec", () => {
     const mockStore = configureStore(middlewares);
 
     it('render the connected(SubjectSchemaVersionsContainer) component', () => {
-        let store = mockStore();
+        let initialState = {
+            selectedSubject: {
+                schemas: [],
+                info: {
+                    subject: 's1'
+                }
+            }
+        };
+        let store = mockStore(initialState);
         let wrapper = mount(<Provider store={store}><SubjectSchemaVersionsContainer/></Provider>);
         expect(wrapper.find(SubjectSchemaVersionsContainer).length).toEqual(1);
     });

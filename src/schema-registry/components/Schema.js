@@ -49,6 +49,9 @@ class Schema extends React.Component {
                               onChange={this.validateAndSetSchema}
                               value={this.state.lastSchema}>
                     </textarea>
+                    <div className="invalid-feedback">
+                        Invalid avro schema
+                    </div>
                 </div>
                 <button type="button" className="btn btn-outline-success" onClick={this.addNewSchema} disabled={!this.state.lastSchema || !this.state.isSchemaValid}>
                     Save

@@ -1,6 +1,7 @@
 import * as types from './actionTypes'
 import * as api from './api'
 
+
 export const searchSubjectsByName = (pattern) => {
     return {
         type: types.SEARCH_SUBJECTS_BY_NAME,
@@ -14,10 +15,10 @@ export const addNewSchemaToSubject = (subject, compatibilityType, schemaText) =>
             .then(() => dispatch(fetchSubjectMeta(subject)))
             .catch(error => {
                 dispatch(failedOperation(types.ADD_NEW_SCHEMA_TO_SUBJECT, error));
-                throw error;
+                console.error(error);
             });
     } else {
-        dispatch(failedOperation(types.ADD_NEW_SCHEMA_TO_SUBJECT, "Schema text should not be empty"));
+        return dispatch(failedOperation(types.ADD_NEW_SCHEMA_TO_SUBJECT, "Schema text should not be empty"));
     }
 };
 
@@ -32,7 +33,7 @@ export const subjectList = () => (dispatch) => {
         .catch(error => {
             dispatch({type: types.NO_CONNECTION});
             dispatch(failedOperation(types.FETCH_SUBJECT_LIST, error));
-            throw error;
+            console.error(error);
         })
 };
 
@@ -66,14 +67,14 @@ export const createSubject = (subjectName, compatibilityType, schema) => dispatc
             .then(() => dispatch({type: types.CREATE_SUBJECT, subjectName}))
             .catch(error => {
                 dispatch(failedOperation(types.CREATE_SUBJECT, error));
-                throw error;
+                console.error(error);
             });
     } else {
         return api.registerSubject(subjectName, compatibilityType, false)
             .then(() => dispatch({type: types.CREATE_SUBJECT, subjectName}))
             .catch(error => {
                 dispatch(failedOperation(types.CREATE_SUBJECT, error));
-                throw error;
+                console.error(error);
             });
     }
 };
@@ -98,16 +99,16 @@ export const deleteSubject = (subject) => (dispatch) => {
         .then(_ => dispatch({type: types.DELETE_SUBJECT, subject}))
         .catch(error => {
             dispatch(failedOperation(types.DELETE_SUBJECT, error));
-            throw error;
+            console.error(error);
         })
 };
 
 export const deleteSubjectSchemaByVersion = (subject, version) => (dispatch) => {
     return api.deleteSubjectSchemaByVersion(subject, version)
-        .then(_ => dispatch({type: types.DELETE_SUBJECT_SCHEMA_VERSION, subject, version}))
+        .then(() => dispatch({type: types.DELETE_SUBJECT_SCHEMA_VERSION, subject, version}))
         .catch(error => {
             dispatch(failedOperation(types.DELETE_SUBJECT_SCHEMA_VERSION, error));
-            throw error;
+            console.error(error);
         })
 };
 
@@ -120,12 +121,12 @@ export const fetchSubjectMeta = (subjectName) => (dispatch) => {
                     info: subjectInfo.data,
                     schemas: subjectSchemas.data
                 };
-                dispatch(updateSubjectMetaList(subjectName, meta))
+                return dispatch(updateSubjectMetaList(subjectName, meta))
             })
         })
         .catch(error => {
             dispatch(failedOperation(types.FETCH_SUBJECT_META, error));
-            throw error;
+            console.error(error);
         })
 };
 
@@ -157,6 +158,6 @@ export const updateSubjectMeta = (subject, compatibilityType, isLocked) => (disp
         .then(() => dispatch({type: types.UPDATE_SUBJECT_META, subject, compatibilityType, isLocked}))
         .catch(error => {
             dispatch(failedOperation(types.UPDATE_SUBJECT_META, error));
-            throw error;
+            console.error(error);
         })
 };
