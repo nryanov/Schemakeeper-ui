@@ -1,10 +1,11 @@
 FROM node:10-alpine3.9 as builder
 COPY . /project
 WORKDIR /project
-RUN npm run build
+RUN npm install && npm run build
 
-FROM node:10-alpine3.9 as builder
+FROM node:10-alpine3.9
 COPY --from=builder /project/build /app
 WORKDIR /app
+EXPOSE 5000
 RUN npm install -g serve
-ENTRYPOINT serve -s .
+CMD serve -s .
