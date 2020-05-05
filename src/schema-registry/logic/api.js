@@ -1,6 +1,8 @@
 import axios from 'axios'
 
 const schemaRegistryUrl = process.env.REACT_APP_SCHEMAKEEPER_URL;
+const apiVersion = "v2";
+const apiUrl = `${schemaRegistryUrl}/${apiVersion}`;
 
 axios.defaults.headers.common = {
     ...axios.defaults.headers.common
