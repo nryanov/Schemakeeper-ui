@@ -1,6 +1,5 @@
 import * as types from './actionTypes'
 
-const PAGE_SIZE = 5;
 
 export default function updateState(state, action) {
     switch (action.type) {
@@ -32,32 +31,10 @@ export default function updateState(state, action) {
                 ...state,
                 subjectsMeta: subjectsMetaAfterDeletingVersion
             };
-        case types.SEARCH_SUBJECTS_BY_NAME:
-            if (action.pattern === null || action.pattern.length === 0) {
-                return {
-                    ...state,
-                    filteredSubjects: null,
-                    page: 1,
-                    maxPage: Math.ceil(state.subjects.length / PAGE_SIZE)
-                };
-            } else {
-                let filteredSubjects = [...state.subjects].filter(subject => subject.includes(action.pattern));
-                return {
-                    ...state,
-                    filteredSubjects: filteredSubjects,
-                    page: 1,
-                    maxPage: Math.ceil(filteredSubjects.length / PAGE_SIZE)
-                };
-            }
         case types.FAILED_OPERATION:
             return {
                 ...state,
                 lastException: `${action.errorMsg}: ${JSON.stringify(action.reason)}`
-            };
-        case types.CHANGE_PAGE:
-            return {
-                ...state,
-                page: action.newPage
             };
         case types.CLEAR_LAST_EXCEPTION:
             return {
@@ -90,7 +67,6 @@ export default function updateState(state, action) {
             return {
                 ...state,
                 subjects: action.subjects,
-                maxPage: Math.ceil(action.subjects.length / PAGE_SIZE)
             };
         case types.CREATE_SUBJECT: {
             let subjects = [...state.subjects];

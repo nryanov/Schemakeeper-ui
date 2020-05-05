@@ -2,13 +2,6 @@ import * as types from './actionTypes'
 import * as api from './api'
 
 
-export const searchSubjectsByName = (pattern) => {
-    return {
-        type: types.SEARCH_SUBJECTS_BY_NAME,
-        pattern
-    }
-};
-
 export const addNewSchemaToSubject = (subject, compatibilityType, schemaText) => (dispatch) => {
     if (schemaText) {
         return api.registerSchemaAndSubject(subject, compatibilityType, schemaText)
@@ -78,13 +71,6 @@ export const createSubject = (subjectName, compatibilityType, schema) => dispatc
             });
     }
 };
-
-export function changePage(newPage) {
-    return {
-        type: types.CHANGE_PAGE,
-        newPage
-    }
-}
 
 export const updateSubjectMetaList = (subject, subjectMeta) => {
     return {
