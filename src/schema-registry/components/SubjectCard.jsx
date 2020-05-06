@@ -1,65 +1,72 @@
 import React from 'react';
-import {connect} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 import SubjectSchemaVersionsContainer from "./SubjectSchemaVersions";
 import SubjectInfoContainer from "./SubjectInfo";
 import SchemaContainer from "./Schema";
 import {deleteSubject} from "../logic/actions";
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Button from "@material-ui/core/Button";
+import DeleteIcon from '@material-ui/icons/Delete';
 
-const SubjectCard = ({subject, deleteSubject}) => (
-    <div className="card">
-        <div className="card-header">
-            {subject}
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+        backgroundColor: theme.palette.background.paper,
+    },
+}));
 
-            {
-                process.env.REACT_APP_ALLOW_TO_DELETE_SUBJECTS === "true" ?
-                <button type="button" className="close" onClick={() => deleteSubject(subject)}>
-                    <span aria-hidden="true">&times;</span>
-                </button> : <></>
-            }
-        </div>
-        <div className="card-body">
-            <ul className="nav nav-tabs" id="myTab" role="tablist">
-                <li className="nav-item">
-                    <a className="nav-link active" id="home-tab" data-toggle="tab" href="#info" role="tab"
-                       aria-controls="home" aria-selected="true">Info</a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link" id="profile-tab" data-toggle="tab" href="#versions" role="tab"
-                       aria-controls="profile" aria-selected="false">Versions</a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link" id="contact-tab" data-toggle="tab" href="#schema" role="tab"
-                       aria-controls="contact" aria-selected="false">Schema</a>
-                </li>
-            </ul>
-            <div className="tab-content" id="myTabContent">
-                <SubjectInfoContainer/>
-                <SubjectSchemaVersionsContainer/>
-                <SchemaContainer/>
-            </div>
-        </div>
-    </div>
-);
-
-const Wrapper = ({info, deleteSubject}) => (
-    <>
-        {info ? <SubjectCard subject={info.subject} deleteSubject={deleteSubject}/> : <></>}
-    </>
-);
-
-const mapStateToProps = state => ({
-    ...state.selectedSubject
-});
-
-const mapDispatchToProps = dispatch => ({
-    deleteSubject(subject) {
-        // eslint-disable-next-line no-restricted-globals
-        if (confirm(`Delete subject ${subject}?`)) {
-            dispatch(deleteSubject(subject))
-        }
+function deleteSubjectButton(handleDeleteSubject) {
+    if (process.env.REACT_APP_ALLOW_TO_DELETE_SUBJECTS === "true") {
+        return (
+            <Button variant="contained" color="secondary" onClick={handleDeleteSubject}>
+                <DeleteIcon/>
+            </Button>
+        );
+    } else {
+        return (<></>)
     }
-});
+}
 
-const SubjectCardContainer = connect(mapStateToProps, mapDispatchToProps)(Wrapper);
+const SubjectCard = () => {
+    const classes = useStyles();
+    const [value, setValue] = React.useState(0);
+    const dispatch = useDispatch();
+    const selectedSubject = useSelector(state => state.selectedSubject);
 
-export default SubjectCardContainer;
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
+    const handleDeleteSubject = () => {
+        // eslint-disable-next-line no-restricted-globals
+        if (confirm(`Delete subject ${selectedSubject.subject}?`)) {
+            dispatch(deleteSubject(selectedSubject.subject))
+        }
+    };
+
+    if (selectedSubject) {
+        return (
+            <div className={classes.root}>
+                <AppBar position="static">
+                    <Tabs value={value} onChange={handleChange} aria-label="tabs">
+                        <Tab label="Subject info" id="subject-info-tab" aria-controls="subject-info-panel" />
+                        <Tab label="Versions" id="subject-schema-versions-tab" aria-controls="subject-schema-versions-panel" />
+                        <Tab label="Schema" id="schema-tab" aria-controls="schema-panel" />
+                    </Tabs>
+
+                    {deleteSubjectButton(handleDeleteSubject)}
+                </AppBar>
+                <SubjectInfoContainer id={"subject-info-panel"} value={value} index={0}/>
+                <SubjectSchemaVersionsContainer id={"subject-schema-versions-panel"} value={value} index={1}/>
+                <SchemaContainer id={"schema-panel"} value={value} index={2}/>
+            </div>
+        );
+    } else {
+        return (<></>);
+    }
+};
+
+export default SubjectCard;

@@ -69,12 +69,9 @@ export default function updateState(state, action) {
                 subjects: action.subjects,
             };
         case types.CREATE_SUBJECT: {
-            let subjects = [...state.subjects];
-            subjects.push(action.subjectName);
-
             return {
                 ...state,
-                subjects: subjects,
+                subjects: [...state.subjects, action.subjectName],
             };
         }
         case types.SELECT_SUBJECT: {
