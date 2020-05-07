@@ -14,8 +14,12 @@ const logger = store => next => action => {
 };
 
 let initialState = {
+    page: 1,
+    maxPage: 1,
+    pageSize: 5,
     subjects: [],
     isAccessible: true,
+    filteredSubjects: null,
     subjectsMeta: {},
     selectedSubject: null,
     lastException: null
