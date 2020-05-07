@@ -1,6 +1,7 @@
 import React from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {clearLastException} from "../logic/actions";
+import { Alert as AlertComponent } from 'reactstrap';
 
 const Alert = () => {
     const lastException = useSelector(state => state.lastException);
@@ -12,14 +13,14 @@ const Alert = () => {
 
     if (lastException) {
         return (
-            <div id='lastExceptionAlert' className="alert alert-danger alert-dismissible fade show" role="alert">
+            <AlertComponent color="danger">
                 {lastException}
                 <button id='lastExceptionAlertCloseBtn' type="button" onClick={clear} className="close"
                         data-dismiss="alert"
                         aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-            </div>
+            </AlertComponent>
         )
     } else {
         return (<></>)
