@@ -1,27 +1,28 @@
 import React from 'react';
-import {Container, Grid} from "@material-ui/core";
+import SubjectsContainer from "./schema-registry/components/Subjects";
 import SubjectCardContainer from "./schema-registry/components/SubjectCard";
 import AlertContainer from "./schema-registry/components/Alert";
 import Header from "./schema-registry/components/Header";
+import PaginationContainer from "./schema-registry/components/Pagination";
+import SearchContainer from "./schema-registry/components/Search";
 import SchemakeeperInfoContainer from "./schema-registry/components/SchemakeeperInfo";
-import SubjectList from "./schema-registry/components/SubjectList";
 
 const App = () => (
-    <Container>
-        <Grid container spacing={3}>
-            <Grid item xs={12}>
-                <Header/>
-                <AlertContainer/>
-            </Grid>
-            <Grid item xs={4}>
-                <SubjectList/>
+    <div className="container-fluid">
+        <Header/>
+        <AlertContainer/>
+        <div className="row mt-4">
+            <div className='col-4'>
+                <SearchContainer/>
+                <SubjectsContainer/>
+                <PaginationContainer/>
                 <SchemakeeperInfoContainer/>
-            </Grid>
-            <Grid item xs={8}>
+            </div>
+            <div className='col-8'>
                 <SubjectCardContainer/>
-            </Grid>
-        </Grid>
-    </Container>
+            </div>
+        </div>
+    </div>
 );
 
 export default App;

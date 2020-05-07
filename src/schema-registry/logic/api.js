@@ -1,7 +1,6 @@
 import axios from 'axios'
 
-// const schemaRegistryUrl = process.env.REACT_APP_SCHEMAKEEPER_URL;
-const schemaRegistryUrl = "http://192.168.99.100:9081";
+const schemaRegistryUrl = process.env.REACT_APP_SCHEMAKEEPER_URL;
 const apiVersion = "v2";
 const apiUrl = `${schemaRegistryUrl}/${apiVersion}`;
 

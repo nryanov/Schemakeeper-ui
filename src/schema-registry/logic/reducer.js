@@ -93,9 +93,12 @@ export default function updateState(state, action) {
                 maxPage: Math.ceil(action.subjects.length / PAGE_SIZE)
             };
         case types.CREATE_SUBJECT: {
+            let subjects = [...state.subjects];
+            subjects.push(action.subjectName);
+
             return {
                 ...state,
-                subjects: [...state.subjects, action.subjectName],
+                subjects: subjects,
             };
         }
         case types.SELECT_SUBJECT: {

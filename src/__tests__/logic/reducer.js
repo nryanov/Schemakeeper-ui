@@ -67,6 +67,44 @@ describe("reducer specs", () => {
         });
     });
 
+    it("SEARCH_SUBJECTS_BY_NAME empty pattern", () => {
+        let state = {
+            subjects: ["s1"],
+            filteredSubjects: {},
+            page: 2,
+            maxPage: 10
+        };
+
+        expect(updateState(state, {
+            type: types.SEARCH_SUBJECTS_BY_NAME,
+            pattern: null
+        })).toEqual({
+            subjects: ["s1"],
+            filteredSubjects: null,
+            page: 1,
+            maxPage: 1
+        });
+    });
+
+    it("SEARCH_SUBJECTS_BY_NAME not empty pattern", () => {
+        let state = {
+            subjects: ["s1", "s2", "s3"],
+            filteredSubjects: null,
+            page: 1,
+            maxPage: 1
+        };
+
+        expect(updateState(state, {
+            type: types.SEARCH_SUBJECTS_BY_NAME,
+            pattern: "s1"
+        })).toEqual({
+            subjects: ["s1", "s2", "s3"],
+            filteredSubjects: ["s1"],
+            page: 1,
+            maxPage: 1
+        });
+    });
+
     it("FAILED_OPERATION", () => {
         let state = {
             lastException: null
@@ -79,6 +117,19 @@ describe("reducer specs", () => {
             lastException: `msg: ${JSON.stringify("reason")}`
         });
     });
+
+    it("CHANGE_PAGE", () => {
+        let state = {
+            page: 1
+        };
+        expect(updateState(state, {
+            type: types.CHANGE_PAGE,
+            newPage: 2
+        })).toEqual({
+            page: 2
+        });
+    });
+
     it("CLEAR_LAST_EXCEPTION", () => {
         let state = {
             lastException: "some message"

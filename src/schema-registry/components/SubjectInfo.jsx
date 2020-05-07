@@ -1,152 +1,138 @@
-import React, {forwardRef, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import React from 'react'
+import {connect} from 'react-redux'
 import {updateSubjectMeta} from "../logic/actions";
-import {makeStyles} from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import DialogContent from "@material-ui/core/DialogContent/DialogContent";
-import Modal from "@material-ui/core/Modal";
 
-function getModalStyle() {
-    const top = 50;
-    const left = 50;
+class SubjectInfoModal extends React.Component {
+    constructor(props) {
+        super(props);
 
-    return {
-        top: `${top}%`,
-        left: `${left}%`,
-        transform: `translate(-${top}%, -${left}%)`,
-    };
+        this.state= {};
+
+        this.clearInputs = this.clearInputs.bind(this);
+        this.save = this.save.bind(this);
+        this.lock = this.lock.bind(this);
+        this.compatibilityType = this.compatibilityType.bind(this);
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        if (!state || props.subject !== state.subject) {
+            return {
+                ...props
+            }
+        } else {
+            return {
+                ...props,
+                ...state
+            }
+        }
+    }
+
+    clearInputs() {
+        this.setState({
+            ...this.props
+
+        })
+    }
+
+    save() {
+        this.props.updateSubjectMeta(this.state.subject, this.state.compatibilityType, this.state.isLocked);
+        this.clearInputs();
+    }
+
+    lock(flag) {
+        this.setState({
+            ...this.state,
+            isLocked: flag
+        })
+    }
+
+    compatibilityType(e) {
+        this.setState({
+            ...this.state,
+            compatibilityType: e.target.value
+        })
+    }
+
+    render() {
+        return (
+            <div className="modal fade" id="updateSubjectMetaModal" tabIndex="-1" role="dialog"
+                 aria-labelledby="updateSubjectMetaModalLabel"
+                 aria-hidden="true">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="updateSubjectMetaModalLabel">{this.props.subject}</h5>
+                            <button type="button" onClick={this.clearInputs} className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <form>
+                                <div className="form-group">
+                                    <label htmlFor="updateSubjectMetaModalCompatibilityType">Compatibility type</label>
+                                    <select className="form-control" onChange={(e) => this.compatibilityType(e)} value={this.state.compatibilityType} id="updateSubjectMetaModalCompatibilityType">
+                                        <option value={"none"}>NONE</option>
+                                        <option value={"backward"}>BACKWARD</option>
+                                        <option value={"forward"}>FORWARD</option>
+                                        <option value={"full"}>FULL</option>
+                                        <option value={"backward_transitive"}>BACKWARD_TRANSITIVE</option>
+                                        <option value={"forward_transitive"}>FORWARD_TRANSITIVE</option>
+                                        <option value={"full_transitive"}>FULL_TRANSITIVE</option>
+                                    </select>
+                                </div>
+                                <div className="form-check form-check-inline">
+                                    <input className="form-check-input" type="radio" name="lockStatus" id="unlocked" onChange={() => this.lock(false)} checked={!this.state.isLocked}/>
+                                    <label className="form-check-label" htmlFor="unlocked">Unlocked</label>
+                                </div>
+                                <div className="form-check form-check-inline">
+                                    <input className="form-check-input" type="radio" name="lockStatus" id="locked" onChange={() => this.lock(true)} checked={this.state.isLocked}/>
+                                    <label className="form-check-label" htmlFor="locked">Locked</label>
+                                </div>
+                            </form>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={this.clearInputs}>
+                                Close
+                            </button>
+                            <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={this.save}>
+                                Save changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 }
 
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        position: 'absolute',
-        width: 400,
-        backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-    },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 120,
-    },
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
-}));
-
-const SubjectInfoModal = (props) => {
-    const classes = useStyles();
-    const [modalStyle] = useState(getModalStyle);
-    const {subject, compatibilityType, isLocked} = useSelector(state => state.selectedSubject.info);
-
-    const [isLockedInput, setLock] = useState(isLocked);
-    const [compatibilityTypeInput, setCompatibilityType] = useState(compatibilityType.toUpperCase());
-
-    const dispatch = useDispatch();
-
-    const handleUpdateSubjectMeta = () => {
-        dispatch(updateSubjectMeta(subject, compatibilityTypeInput, isLockedInput))
-    };
-
-    const clearInputs = () => {
-        setLock(isLocked);
-        setCompatibilityType(compatibilityType);
-    };
-
-    const handleClose = () => {
-        clearInputs();
-        props.handleClose();
-    };
-
-    return (
-        <Card innerRef={props.innerRef} style={modalStyle} className={classes.paper}>
-            <CardContent>
-                <div>
-                    <Typography variant="h6">
-                        {subject}
-                    </Typography>
-                </div>
-
-                <form className={classes.root} noValidate autoComplete="off">
-                    <div>
-                        <FormControl className={classes.formControl}>
-                            <InputLabel id="compatibility-type-label">Compatibility type</InputLabel>
-                            <Select
-                                labelId="compatibility-type-label"
-                                id="compatibility-type-id"
-                                value={compatibilityTypeInput}
-                                onChange={event => setCompatibilityType(event.target.value)}
-                            >
-                                <MenuItem value={"NONE"}>NONE</MenuItem>
-                                <MenuItem value={"BACKWARD"}>BACKWARD</MenuItem>
-                                <MenuItem value={"FORWARD"}>FORWARD</MenuItem>
-                                <MenuItem value={"FULL"}>FULL</MenuItem>
-                                <MenuItem value={"BACKWARD_TRANSITIVE"}>BACKWARD_TRANSITIVE</MenuItem>
-                                <MenuItem value={"FORWARD_TRANSITIVE"}>FORWARD_TRANSITIVE</MenuItem>
-                                <MenuItem value={"FULL_TRANSITIVE"}>FULL_TRANSITIVE</MenuItem>
-                            </Select>
-                        </FormControl>
-
-                        <FormControlLabel control={<Switch />} label={isLockedInput ? "Locked" : "Unlocked"} />
-                    </div>
-                </form>
-
-                <ButtonGroup color="secondary" aria-label="outlined primary button group">
-                    <Button variant="contained" onClick={handleClose}>
-                        Close
-                    </Button>
-                    <Button variant="contained" onClick={handleUpdateSubjectMeta}>
-                        Save changes
-                    </Button>
-                </ButtonGroup>
-
-            </CardContent>
-        </Card>
-    )
-};
-
-const SubjectInfo = ({id, value, index}) => {
-    const {subject, compatibilityType, isLocked} = useSelector(state => state.selectedSubject.info);
-    const [open, setOpen] = useState(false);
-
-    const handleClose = () => setOpen(false);
-
-    const handleOpen = () => setOpen(true);
-
-    const ModalComponent = forwardRef((props, ref) => {
-        return <SubjectInfoModal innerRef={ref} handleClose={handleClose}/>;
-    });
-
-    return (
-        <Paper id={id} hidden={value !== index}>
-            <Modal open={open} onClose={handleClose} aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description">
-                <DialogContent>
-                    <ModalComponent/>
-                </DialogContent>
-            </Modal>
+const SubjectInfo = ({subject, compatibilityType, isLocked, updateSubjectMeta}) => (
+    <>
+        <SubjectInfoModal subject={subject} compatibilityType={compatibilityType} isLocked={isLocked} updateSubjectMeta={updateSubjectMeta}/>
+        <div className="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
             <ul className="list-unstyled mt-4">
                 <li><strong>Subject name:</strong> {subject}</li>
                 <li><strong>Compatibility type: </strong> {compatibilityType}</li>
                 <li><strong>Locked: </strong> {isLocked ? "true" : "false"}</li>
             </ul>
+            <form className="form-inline">
+                <button className="btn btn-outline-success" type="button" data-toggle="modal" data-target="#updateSubjectMetaModal">
+                    Settings
+                </button>
+            </form>
+        </div>
+    </>
+);
 
-            <Button variant="contained" onClick={handleOpen}>
-                Settings
-            </Button>
-        </Paper>
-    );
-};
+const mapStateToProps = state => ({
+    ...state.selectedSubject.info
+});
 
-export default SubjectInfo;
+const mapDispatchToProps = dispatch => ({
+    updateSubjectMeta(subjectName, compatibilityType, isLocked) {
+        dispatch(updateSubjectMeta(subjectName, compatibilityType, isLocked))
+    }
+});
+
+const SubjectInfoContainer = connect(mapStateToProps, mapDispatchToProps)(SubjectInfo);
+
+export default SubjectInfoContainer;

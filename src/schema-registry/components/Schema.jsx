@@ -1,53 +1,78 @@
-import React, {useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import React from 'react'
+import {connect} from 'react-redux'
 import {isSchemaValid, schemaTextToJsonNotEscaped} from "../utils/AvroUtils";
 import {addNewSchemaToSubject} from "../logic/actions";
-import Paper from "@material-ui/core/Paper/Paper";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 
-function lastSchema(schemas) {
-    return schemas.length > 0 ? schemaTextToJsonNotEscaped(schemas[schemas.length - 1].schemaText) : '';
+class Schema extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+
+        this.schemaInput = React.createRef();
+
+        this.validateAndSetSchema = this.validateAndSetSchema.bind(this);
+        this.addNewSchema = this.addNewSchema.bind(this);
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        if (!state || props.info !== state.info) {
+            return  {
+                ...props,
+                lastSchema: props.schemas.length > 0 ? schemaTextToJsonNotEscaped(props.schemas[props.schemas.length - 1].schemaText) : '',
+                isSchemaValid: true
+            }
+        } else {
+            return {
+                ...props,
+                ...state
+            }
+        }
+    }
+
+    validateAndSetSchema() {
+        this.setState({
+            isSchemaValid: this.schemaInput.current.value.length === 0 || isSchemaValid(this.schemaInput.current.value),
+            lastSchema: this.schemaInput.current.value
+        })
+    }
+
+    addNewSchema() {
+        this.state.addNewSchemaToSubject(this.state.info.subject, this.state.info.compatibilityType, JSON.stringify(this.state.lastSchema));
+    }
+
+    render() {
+        return (
+            <div className="tab-pane fade" id="schema" role="tabpanel" aria-labelledby="schema-tab">
+                <div className="form-group mt-4">
+                    <textarea className={`form-control ${this.state.isSchemaValid ? '' : 'is-invalid'}`} id="updateSchema"
+                              ref={this.schemaInput} rows="3"
+                              onChange={this.validateAndSetSchema}
+                              value={this.state.lastSchema}>
+                    </textarea>
+                    <div className="invalid-feedback">
+                        Invalid avro schema
+                    </div>
+                </div>
+                <button type="button" className="btn btn-outline-success" onClick={this.addNewSchema} disabled={!this.state.lastSchema || !this.state.isSchemaValid}>
+                    Save
+                </button>
+
+            </div>
+        )
+    }
 }
 
-const Schema = ({id, value, index}) => {
-    const {info, schemas} = useSelector(state => state.selectedSubject);
-    const dispatch = useDispatch();
-    const [schemaInput, setSchema] = useState(lastSchema(schemas));
-    const [isSchemaValidState, validateSchema] = useState(true);
+const mapStateToProps = state => ({
+    ...state.selectedSubject
+});
 
-    const handleAddNewSchemaToSubject = () => {
-        dispatch(addNewSchemaToSubject(info.subject, info.compatibilityType, JSON.stringify(schemaInput)))
-    };
+const mapDispatchToProps = dispatch => ({
+    addNewSchemaToSubject(subjectName, compatibilityType, schema) {
+        dispatch(addNewSchemaToSubject(subjectName, compatibilityType, schema))
+    }
+});
 
-    const validateAndSetSchema = (event, newValue) => {
-        setSchema(newValue);
-        validateSchema(isSchemaValid(newValue));
-    };
+const SchemaContainer = connect(mapStateToProps, mapDispatchToProps)(Schema);
 
-    return (
-        <Paper id={id} hidden={value !== index}>
-            <div>
-                <TextField
-                    error={!isSchemaValidState}
-                    id="schema-id"
-                    label="Schema"
-                    multiline
-                    rows={4}
-                    helperText={isSchemaValidState ? "" : "Incorrect avro schema"}
-                    variant="outlined"
-                    onChange={validateAndSetSchema}
-                    margin="normal"
-                    defaultValue={schemas}
-                />
-            </div>
-
-            <Button variant="contained" onClick={handleAddNewSchemaToSubject} disabled={!schemaInput || !isSchemaValidState}>
-                Save
-            </Button>
-        </Paper>
-    );
-};
-
-export default Schema;
+export default SchemaContainer;
 
