@@ -142,19 +142,8 @@ export const selectSubject = (subjectName) => (dispatch, getState) => {
     }
 };
 
-//todo: fix race condition
-// A -> delay -> updateSubjectCompatibility-A -> updateLockStatus-A
-//   B -> updateSubjectCompatibility-B -> delay -> updateLockStatus-B
-// updateSubjectCompatibility-A updateLockStatus-B
-export const updateSubjectMeta = (subject, compatibilityType, isLocked) => (dispatch, getState) => {
-    api.updateSubjectCompatibility(subject, compatibilityType)
-        .then(() => {
-            if (isLocked) {
-                return api.lockSubject(subject);
-            } else {
-                return api.unlockSubject(subject);
-            }
-        })
+export const updateSubjectMeta = (subject, compatibilityType, isLocked) => (dispatch) => {
+    api.updateSubjectSettings(subject, compatibilityType, isLocked)
         .then(() => dispatch({type: types.UPDATE_SUBJECT_META, subject, compatibilityType, isLocked}))
         .catch(error => {
             dispatch(failedOperation(types.UPDATE_SUBJECT_META, error));

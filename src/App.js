@@ -9,9 +9,19 @@ import SchemakeeperInfoContainer from "./schema-registry/components/Schemakeeper
 
 const App = () => (
     <div className="container-fluid">
-        <Header/>
-        <AlertContainer/>
-        <div className="row mt-4">
+        <div className="row">
+            <div className='col-12'>
+                <Header/>
+            </div>
+        </div>
+
+        <div className="row mt-2">
+            <div className='col-12'>
+                <AlertContainer/>
+            </div>
+        </div>
+
+        <div className="row mt-2">
             <div className='col-4'>
                 <SearchContainer/>
                 <SubjectsContainer/>

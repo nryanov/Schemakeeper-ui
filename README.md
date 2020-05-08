@@ -1,13 +1,13 @@
-# Schemakeeper-ui
+# schemakeeper-ui
 
-[![Build Status](https://img.shields.io/travis/nryanov/Schemakeeper-ui/master.svg)](https://travis-ci.com/nryanov/Schemakeeper-ui)
+[![Build Status](https://img.shields.io/travis/nryanov/schemakeeper-ui/master.svg)](https://travis-ci.com/nryanov/schemakeeper-ui)
 
-This is a web tool for the [schemakeeper](https://github.com/nryanov/Schemakeeper).
+This is a web tool for the [schemakeeper](https://github.com/nryanov/schemakeeper).
  
 ## Build from source
 ```text
 git clone https://github.com/nryanov/Schemakeeper-ui.git
-cd Schemakeeper-ui
+cd schemakeeper-ui
 npm install
 npm run build
 ```
@@ -30,7 +30,7 @@ docker run --name=schemakeeper-ui -p 5000:5000 \
     -e REACT_APP_SCHEMAKEEPER_URL=http://localhost:9081 \
     -e REACT_APP_ALLOW_TO_DELETE_SUBJECTS=false \
     -e REACT_APP_ALLOW_TO_DELETE_SUBJECTS_SCHEMAS=false \
-    -d schemakeeper/schemakeeper-ui:{version}
+    -d nryanov/schemakeeper-ui:{version}
 ```
 
 ## Settings
@@ -44,8 +44,9 @@ To be able to use this tool it is needed to configure CORS seetings in schemakee
 
 ```
 docker run --name=schemakeeper -p 9081:9081 \
- -e SCHEMAKEEPER_ALLOWS_ORIGIN=* \
+ -e SCHEMAKEEPER_ALLOWS_ORIGINS=* \
  -e SCHEMAKEEPER_ALLOWS_METHODS=GET,POST,PUT,DELETE \
- -e SCHEMAKEEPER_ALLOWS_HEADER=Content-Type \
- -d schemakeeper/server:{version}
+ -e SCHEMAKEEPER_ALLOWS_HEADERS=* \
+ -d nryanov/schemakeeper:{version}
 ```
+
