@@ -9,8 +9,8 @@ function lastSchema(schemas) {
 
 const Schema = () => {
     const dispatch = useDispatch();
-    const schemas = useSelector(state => state.selectedSubject.schemas);
-    const {subject, compatibilityType} = useSelector(state => state.selectedSubject.info);
+    const schemas = useSelector(state => state.selectedSubject ? state.selectedSubject.schemas : []);
+    const {subject, compatibilityType} = useSelector(state => state.selectedSubject ? state.selectedSubject.info : {});
     const [isSchemaValidState, setSchemaValid] = useState(true);
     const [schemaInput, setSchema] = useState(lastSchema(schemas));
 

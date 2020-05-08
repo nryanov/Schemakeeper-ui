@@ -13,7 +13,7 @@ const Alert = () => {
 
     if (lastException) {
         return (
-            <AlertComponent color="danger">
+            <AlertComponent color="danger" id="lastExceptionAlert">
                 {lastException}
                 <button id='lastExceptionAlertCloseBtn' type="button" onClick={clear} className="close"
                         data-dismiss="alert"
